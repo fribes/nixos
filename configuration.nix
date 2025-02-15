@@ -122,6 +122,7 @@
     gnomeExtensions.astra-monitor
     dconf-editor
     minicom
+    android-tools
     ansible
     imhex
     docker
