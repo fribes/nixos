@@ -119,6 +119,7 @@
     starship
     neofetch
     gnomeExtensions.workspace-matrix
+    gnomeExtensions.astra-monitor
     dconf-editor
     minicom
     ansible
