@@ -113,7 +113,6 @@
     ripgrep
     fd
     btop
-    minicom
     bat
     yazi
     ncdu
