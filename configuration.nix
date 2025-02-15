@@ -106,6 +106,7 @@
     vim-full                   # full for clipboard support
     wget
     curl
+    file
     terminator
     fzf
     zoxide
