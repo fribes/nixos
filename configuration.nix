@@ -108,6 +108,7 @@
     curl
     file
     terminator
+    direnv
     fzf
     zoxide
     ripgrep
@@ -153,6 +154,7 @@
       eval "$(fzf --bash)"
       eval "$(starship init bash)"
       eval "$(zoxide init bash)"
+      eval "$(direnv hook bash)"
     '';
 
   programs.firefox.policies = {
