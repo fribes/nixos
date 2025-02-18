@@ -148,10 +148,11 @@
   nixpkgs.config.permittedInsecurePackages = [
     "openssl-1.1.1w"           # required by sublime text
   ];
-        
+  
   programs.bash.interactiveShellInit = ''
       eval "$(fzf --bash)"
       eval "$(starship init bash)"
+      eval "$(zoxide init bash)"
     '';
 
   programs.firefox.policies = {
@@ -195,7 +196,7 @@
     #stm32flasher="_stm32flash() { /usr/local/STMicroelectronics/STM32Cube/STM32CubeProgrammer/bin/STM32_Programmer_CLI --connect port=SWD freq=12000 --write $1 0x08000000 -g;}; _stm32flash";
     #stm32reset="/usr/local/STMicroelectronics/STM32Cube/STM32CubeProgrammer/bin/STM32_Programmer_CLI --connect port=SWD freq=12000 -hardRst";
    }
-   
+
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;
