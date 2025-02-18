@@ -1,0 +1,14 @@
+{
+	"font_size": 10,
+	"ignored_packages":
+	[
+		"Mermaid",
+		"Vintage",
+	],
+	"index_files": true,
+	"hardware_acceleration": "opengl",
+	"show_encoding": true,
+	"show_line_endings": true,
+	"highlight_modified_tabs": false,
+	"sublime_merge_path": "/snap/bin/sublime-merge",
+}

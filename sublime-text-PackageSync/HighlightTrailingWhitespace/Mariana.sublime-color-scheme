@@ -1,0 +1,10 @@
+{
+    "rules": [
+        {
+            "scope": "HighlightTrailingWhitespace", 
+            "foreground": "#FF0000", 
+            "name": "Outline"
+        }
+    ], 
+    "name": "Highlight Trailing Whitespace"
+}

@@ -1,0 +1,18 @@
+[
+	{ "keys": ["ctrl+shift+!"], "command": "change_quotes" },
+	{ "keys": ["shift+alt+d"], "command": "set_setting", "args":
+		{
+		"setting": "draw_white_space",
+		"value": "all"
+		}
+	},
+	{ "keys": ["shift+alt+a"], "command": "set_setting", "args":
+		{
+		"setting": "draw_white_space",
+		"value": "selection"
+		}
+	},
+    { "keys": ["alt+t"], "command": "toggle_terminus_panel" },
+    { "keys": ["f12"], "command": "lsp_typescript_goto_source_definition" },
+    { "keys": ["ctrl+k", "ctrl+:"], "command": "toggle_inline_diff" }
+]

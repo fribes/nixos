@@ -1,0 +1,28 @@
+{
+	"bootstrapped": true,
+	"in_process_packages":
+	[
+		"Mermaid",
+	],
+	"installed_packages":
+	[
+		"ADBView",
+		"ChangeQuotes",
+		"Clang Format",
+		"CMake",
+		"Devicetree DTS Highlighting",
+		"Highlight Trailing Whitespace",
+		"JsPrettier",
+		"Just",
+		"LSP",
+		"LSP-clangd",
+		"LSP-typescript",
+		"Markdown HTML Preview",
+		"Mermaid",
+		"Nix",
+		"Package Control",
+		"PackageSync",
+		"SysLog",
+		"Terminus",
+	],
+}

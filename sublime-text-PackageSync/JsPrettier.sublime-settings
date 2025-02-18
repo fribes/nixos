@@ -1,0 +1,5 @@
+// Settings in here override those in "/JsPrettier/JsPrettier.sublime-settings",
+
+{
+	"node_path": "/home/fribes/.nvm/versions/node/v18.19.1/bin/node"
+}
