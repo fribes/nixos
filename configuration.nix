@@ -115,6 +115,7 @@
     fd
     btop
     bat
+    diff-so-fancy
     yazi
     ncdu
     starship
