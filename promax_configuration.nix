@@ -24,6 +24,17 @@
   # Enable networking
   networking.networkmanager.enable = true;
 
+  services.avahi = {
+    enable = true;
+    nssmdns4 = true;
+    nssmdns6 = true;
+    publish = {
+      enable = true;
+      workstation = true;
+      addresses = true;
+    };
+  };
+
   # Set your time zone.
   time.timeZone = "Europe/Paris";
 
