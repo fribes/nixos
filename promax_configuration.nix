@@ -163,10 +163,6 @@
     zathura
   ];
 
-  xdg.mime.defaultApplications = {
-    "application/pdf" = "zathura";
-  };
-
   virtualisation.docker.enable = true;
 
   fonts.packages = [
