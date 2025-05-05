@@ -91,11 +91,13 @@
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
+  users.groups.plugdev = {};
+
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.fribes = {
     isNormalUser = true;
     description = "fribes";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "docker" "plugdev"];
     packages = with pkgs; [
     #  thunderbird
     ];
@@ -156,9 +158,13 @@
     wireshark
     audacity
     nmap
+    usbutils
+    docker
   ];
 
- environment.gnome.excludePackages = with pkgs; [
+  virtualisation.docker.enable = true;
+
+  environment.gnome.excludePackages = with pkgs; [
     epiphany    # web browser
     totem       # video player
     geary       # email client
