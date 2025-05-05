@@ -164,16 +164,6 @@
 
   virtualisation.docker.enable = true;
 
-  environment.gnome.excludePackages = with pkgs; [
-    epiphany    # web browser
-    totem       # video player
-    geary       # email client
-
-    # these should be self explanatory
-    gnome-calendar gnome-contacts
-    gnome-music gnome-photos gnome-weather
-  ];
-
   fonts.packages = [
            pkgs.nerd-fonts._0xproto
            pkgs.nerd-fonts.droid-sans-mono
@@ -182,7 +172,7 @@
   nixpkgs.config.permittedInsecurePackages = [
     "openssl-1.1.1w"           # required by sublime text
   ];
-  
+
   programs.bash.interactiveShellInit = ''
       eval "$(fzf --bash)"
       eval "$(starship init bash)"
