@@ -160,7 +160,12 @@
     nmap
     usbutils
     docker
+    zathura
   ];
+
+  xdg.mime.defaultApplications = {
+    "application/pdf" = "zathura";
+  };
 
   virtualisation.docker.enable = true;
 
