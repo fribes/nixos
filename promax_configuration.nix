@@ -122,47 +122,47 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    vim-full                   # full for clipboard support
-    wget
-    curl
-    file
-    terminator
-    direnv
-    fzf
-    zoxide
-    ripgrep
-    fd
-    btop
-    bat
-    diff-so-fancy
-    stow
-    yazi
-    ncdu
-    starship
-    neofetch
-    gnomeExtensions.workspace-matrix
-    gnomeExtensions.astra-monitor
-    dconf-editor
-    minicom
     android-tools
     ansible
-    imhex
+    audacity
+    bat
+    btop
+    curl
+    dconf-editor
+    diff-so-fancy
+    direnv
+    docker
     docker
     docker-compose
+    fd
+    file
+    fzf
+    gimp
     git
     git-lfs
+    gnomeExtensions.astra-monitor
+    gnomeExtensions.workspace-matrix
     gnupg
-    sublime4
-    slack
+    imhex
     keepassxc
     meld
-    gimp
-    wireshark
-    audacity
+    minicom
+    ncdu
+    neofetch
     nmap
+    ripgrep
+    slack
+    starship
+    stow
+    sublime4
+    terminator
     usbutils
-    docker
+    vim-full                   # full for clipboard support
+    wget
+    wireshark
+    yazi
     zathura
+    zoxide
   ];
 
   virtualisation.docker.enable = true;
