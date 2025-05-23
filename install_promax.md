@@ -33,6 +33,9 @@ ux501> tar czf /removable media/secrets.tgz .ssh .gnupg
 promax> tar xzf /removable media/secrets.tgz
 promax> shred -u /removable media/secrets.tgz
 
+
+promax> scp -r ux501.local:Documents/Keepass .
+
 ## Copy Sublime Text confdguration
 
 fribes in 🌐 ux501 in ~ 
