@@ -204,6 +204,8 @@
         # `jq .applications.gecko.id manifest.json` to get the UUID
   };
 
+  services.fwupd.enable = true;
+
   services.udev.extraRules = ''
     SUBSYSTEM=="usb", ATTR{idVendor}=="8087", MODE="0666", GROUP="plugdev"
     SUBSYSTEM=="usb", ATTR{idVendor}=="18d1", MODE="0666", GROUP="plugdev"
