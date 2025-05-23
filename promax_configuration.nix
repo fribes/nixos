@@ -150,6 +150,7 @@
     ncdu
     neofetch
     nmap
+    probe-rs
     ripgrep
     slack
     starship
@@ -208,6 +209,7 @@
     SUBSYSTEM=="usb", ATTR{idVendor}=="1d6b", MODE="0666", GROUP="plugdev"
     SUBSYSTEM=="usb", ATTR{idVendor}=="0b05", MODE="0666", GROUP="plugdev"
     SUBSYSTEM=="usb", ATTR{idVendor}=="0bda", MODE="0666", GROUP="plugdev"
+    ATTRS{idVendor}=="0483", ATTRS{idProduct}=="3754", MODE="660", GROUP="plugdev", TAG+="uaccess"
     '';
 
   environment.shellAliases = {
