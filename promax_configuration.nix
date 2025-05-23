@@ -162,6 +162,7 @@
     wget
     wireshark
     yazi
+    yubico-piv-tool
     zathura
     zoxide
   ];
