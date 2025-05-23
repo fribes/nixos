@@ -99,7 +99,7 @@
   users.users.fribes = {
     isNormalUser = true;
     description = "fribes";
-    extraGroups = [ "networkmanager" "wheel" "docker" "plugdev"];
+    extraGroups = [ "networkmanager" "wheel" "docker" "plugdev" "dialout"];
     packages = with pkgs; [
     #  thunderbird
     ];
