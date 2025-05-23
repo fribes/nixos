@@ -227,8 +227,8 @@
     ll="ls -alF";
     ls="ls --color=auto";
     status-git="for dir in `find . -maxdepth 1 -type d`; do cd $dir; pwd; git st; cd - >/dev/null; done";
-    #stm32flasher="_stm32flash() { /usr/local/STMicroelectronics/STM32Cube/STM32CubeProgrammer/bin/STM32_Programmer_CLI --connect port=SWD freq=12000 --write $1 0x08000000 -g;}; _stm32flash";
-    #stm32reset="/usr/local/STMicroelectronics/STM32Cube/STM32CubeProgrammer/bin/STM32_Programmer_CLI --connect port=SWD freq=12000 -hardRst";
+    stm32reset="probe-rs reset --chip STM32H723ZGTx --probe 0483:3754";
+    stm32flash="probe-rs download --chip STM32H723ZGTx --probe 0483:3754";
    };
 
   # Some programs need SUID wrappers, can be configured further or are
