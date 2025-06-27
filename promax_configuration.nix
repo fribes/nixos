@@ -208,6 +208,8 @@ in
 
   services.fwupd.enable = true;
 
+  services.flatpak.enable = true;
+
   services.udev.extraRules = ''
     SUBSYSTEM=="usb", ATTR{idVendor}=="8087", MODE="0666", GROUP="plugdev"
     SUBSYSTEM=="usb", ATTR{idVendor}=="18d1", MODE="0666", GROUP="plugdev"
@@ -238,6 +240,7 @@ in
     status-git="for dir in `find . -maxdepth 1 -type d`; do cd $dir; pwd; git st; cd - >/dev/null; done";
     stm32reset="probe-rs reset --chip STM32H723ZGTx --probe 0483:3754";
     stm32flash="probe-rs download --chip STM32H723ZGTx --probe 0483:3754";
+    sdrangel="flatpak run org.sdrangel.SDRangel";
    };
 
   # Some programs need SUID wrappers, can be configured further or are
