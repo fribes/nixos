@@ -135,7 +135,6 @@ in
     diff-so-fancy
     direnv
     docker
-    docker
     docker-compose
     fd
     file
