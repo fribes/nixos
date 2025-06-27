@@ -4,6 +4,9 @@
 
 { config, pkgs, ... }:
 
+let
+  github_token = builtins.readFile /home/fribes/.ssh/repo_rw_packages_til_2026_03_10.txt;
+in
 {
   imports =
     [ # Include the results of the hardware scan.
@@ -214,6 +217,13 @@
     SUBSYSTEM=="usb", ATTR{idVendor}=="0bda", MODE="0666", GROUP="plugdev"
     ATTRS{idVendor}=="0483", ATTRS{idProduct}=="3754", MODE="660", GROUP="plugdev", TAG+="uaccess"
     '';
+
+  systemd.services.nix-daemon.serviceConfig.Environment = [
+      ''NIX_NPM_TOKENS={\"npm.pkg.github.com\":\"${github_token}\"}''
+      ''GITHUB_TOKEN=${github_token}''
+      ''NIX_SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt''
+      ''SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt''
+  ];
 
   environment.shellAliases = {
     #allegro="wine .wine/drive_c/Cadence/PCBViewers_2023/tools/bin/allegro_free_viewer.exe";
