@@ -47,3 +47,7 @@ subl.tgz                                                                        
 
 ❯ tar xzf subl.tgz 
 
+
+nix-shell -p android-studio-tools
+yes | sdkmanager --licenses  --sdk_root=/nix/store/ffm29srkmhm6d03hnfww3qnfwls2yyf4-android-studio-tools-13114758 
+export ANDROID_HOME=/nix/store/ffm29srkmhm6d03hnfww3qnfwls2yyf4-android-studio-tools-13114758
