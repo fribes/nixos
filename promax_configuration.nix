@@ -5,7 +5,7 @@
 { config, pkgs, ... }:
 
 let
-  github_token = builtins.readFile /home/fribes/.ssh/repo_rw_packages_til_2026_03_10.txt;
+  github_token = builtins.readFile /home/fribes/github_token;
 in
 {
   imports =
