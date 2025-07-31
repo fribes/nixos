@@ -127,7 +127,7 @@ in
   environment.systemPackages = with pkgs; [
     android-tools
     ansible
-    audacity
+#    audacity
     bat
     btop
     curl
