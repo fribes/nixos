@@ -160,6 +160,7 @@ in
     sublime4
     terminator
     usbutils
+    vlc
     vim-full                   # full for clipboard support
     wget
     wireshark
@@ -259,6 +260,7 @@ in
     stm32reset="probe-rs reset --chip STM32H723ZGTx --probe 0483:3754";
     stm32flash="probe-rs download --chip STM32H723ZGTx --probe 0483:3754";
     sdrangel="flatpak run org.sdrangel.SDRangel";
+    usbc-info="bat /sys/class/power_supply/ucsi-source-psy-USBC000:00?/uevent";
    };
 
   # Some programs need SUID wrappers, can be configured further or are
