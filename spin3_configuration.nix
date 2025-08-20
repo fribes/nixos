@@ -1,8 +1,5 @@
 { config, pkgs, ... }:
 
-#let
-#  github_token = builtins.readFile /home/fribes/github_token;
-#in
 {
   imports =
     [ # Include the results of the hardware scan.
@@ -129,6 +126,7 @@
     direnv
     fd
     file
+    fldigi
     fzf
     git
     gnomeExtensions.astra-monitor
@@ -148,6 +146,7 @@
     vlc
     vim-full                   # full for clipboard support
     wget
+    wsjtx
     yazi
     zathura
     zoxide
