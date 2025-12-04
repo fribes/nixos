@@ -124,7 +124,6 @@ in
   environment.systemPackages = with pkgs; [
     android-tools
     ansible
-#    audacity
     bat
     btop
     curl
@@ -136,6 +135,7 @@ in
     fd
     file
     fzf
+    genpass
     gimp
     git
     git-lfs
@@ -144,6 +144,7 @@ in
     gnupg
     imhex
     keepassxc
+    libreoffice
     meld
     minicom
     ncdu
