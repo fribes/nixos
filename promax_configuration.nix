@@ -150,7 +150,7 @@ in
     ncdu
     neofetch
     nmap
-    probe-rs
+    probe-rs-tools
     ripgrep
     slack
     starship
