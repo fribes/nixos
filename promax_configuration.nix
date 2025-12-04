@@ -116,9 +116,6 @@ in
   systemd.services."getty@tty1".enable = false;
   systemd.services."autovt@tty1".enable = false;
 
-  # Install firefox.
-  programs.firefox.enable = true;
-
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
@@ -206,7 +203,9 @@ in
       eval "$(direnv hook bash)"
     '';
 
-  programs.firefox.policies = {
+  programs.firefox = {
+    enable = true;
+    policies = {
       ExtensionSettings = with builtins;
         let extension = shortId: uuid: {
           name = uuid;
@@ -217,12 +216,17 @@ in
         };
         in listToAttrs [
           (extension "ublock-origin" "uBlock0@raymondhill.net")
+          (extension "proton-vpn-firefox-extension" "{8e3630b0-33e1-482a-a53b-240251a37a7b}")
         ];
         # To add additional extensions, find it on addons.mozilla.org, find
         # the short ID in the url (like https://addons.mozilla.org/en-US/firefox/addon/!SHORT_ID!/)
         # Then, download the XPI by filling it in to the install_url template, unzip it,
         # run `jq .browser_specific_settings.gecko.id manifest.json` or
         # `jq .applications.gecko.id manifest.json` to get the UUID
+    };
+    preferences = {
+      "network.trr.mode" = 3;
+    };
   };
 
   services.fwupd.enable = true;
