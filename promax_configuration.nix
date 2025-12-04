@@ -197,12 +197,15 @@ in
     "openssl-1.1.1w"           # required by sublime text
   ];
 
-  programs.bash.interactiveShellInit = ''
+  programs.bash = {
+    completion.enable = true;
+    interactiveShellInit = ''
       eval "$(fzf --bash)"
       eval "$(starship init bash)"
       eval "$(zoxide init bash)"
       eval "$(direnv hook bash)"
     '';
+  };
 
   programs.firefox = {
     enable = true;
