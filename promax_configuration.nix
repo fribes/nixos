@@ -160,6 +160,7 @@ in
     nmap
     probe-rs-tools
     ripgrep
+    rust-analyzer
     slack
     starship
     stow
