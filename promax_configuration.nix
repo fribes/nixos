@@ -33,6 +33,7 @@ in
     enable = true;
     nssmdns4 = true;
     nssmdns6 = true;
+    openFirewall = true;
     publish = {
       enable = true;
       workstation = true;
@@ -75,7 +76,14 @@ in
   console.keyMap = "fr";
 
   # Enable CUPS to print documents.
-  services.printing.enable = true;
+  services.printing = {
+    enable = true;
+    drivers = [
+      pkgs.brlaser  # Driver générique excellent pour beaucoup de Brother Laser
+    ];
+  };
+
+
 
   # Enable sound with pipewire.
   services.pulseaudio.enable = false;
