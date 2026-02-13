@@ -146,6 +146,7 @@
     vlc
     vim-full                   # full for clipboard support
     wget
+    wine
     wsjtx
     yazi
     zathura
