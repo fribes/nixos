@@ -222,6 +222,7 @@
     ll="ls -alF";
     ls="ls --color=auto";
     sdrangel="flatpak run org.sdrangel.SDRangel";
+    gp300="wine '.wine/drive_c/Program Files/Motorola/Professional GP300 GM300 CPS/R03.11.16_EN/gp300.exe'";
    };
 
   # Some programs need SUID wrappers, can be configured further or are
