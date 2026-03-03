@@ -4,7 +4,7 @@
 
 { config, pkgs, lib,... }:
 
-  let
+let
   ov-xml = pkgs.fetchurl {
     url = "https://huggingface.co/katuni4ka/ssdlite_mobilenet_v2_fp16/resolve/main/ssdlite_mobilenet_v2_fp16.xml";
     hash = "sha256-fj4qmst8eAx1lD2pgnQMNyo3RZ15DScKmGNfOnZjFHo=";
@@ -111,8 +111,19 @@ in
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
 
+  services.avahi = {
+    enable = true;
+    nssmdns4 = true;
+    publish = {
+      enable = true;
+      addresses = true;
+      userServices = true;
+    };
+  };
+
   # Open ports in the firewall.
-  networking.firewall.allowedTCPPorts = [ 80 22 ];
+  networking.firewall.allowedTCPPorts = [ 80 22 8123 ];
+  networking.firewall.allowedUDPPorts = [ 5353 1900 ];
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
@@ -198,6 +209,50 @@ in
         }
 	];
       };
+      cameras."Tourette" = {
+        ffmpeg.inputs = [ {
+          path = "rtsp://${rtsp_creds}@192.168.1.202:554/Streaming/Channels/101";
+          roles = [
+            "record"
+          ];
+          input_args = [
+            "-avoid_negative_ts" "make_zero"
+            "-fflags" "+genpts+discardcorrupt"
+            "-rtsp_transport" "tcp"
+            "-timeout" "5000000"
+            "-use_wallclock_as_timestamps" "1"
+          ];
+        }
+        {
+          path = "rtsp://${rtsp_creds}@192.168.1.202:554/Streaming/Channels/102";
+          roles = [
+            "detect"
+          ];
+          input_args = [
+            "-avoid_negative_ts" "make_zero"
+            "-fflags" "+genpts+discardcorrupt"
+            "-rtsp_transport" "tcp"
+            "-timeout" "5000000"
+            "-use_wallclock_as_timestamps" "1"
+          ];
+        }
+	];
+      };
+    };
+  };
+  virtualisation.oci-containers = {
+    backend = "podman";
+    containers.homeassistant = {
+      volumes = [ "home-assistant:/config" ];
+      environment.TZ = "Europe/Paris";
+      # Note: The image will not be updated on rebuilds, unless the version label changes
+      image = "ghcr.io/home-assistant/home-assistant:stable";
+      extraOptions = [ 
+        # Use the host network namespace for all sockets
+        "--network=host"
+        # Pass devices into the container, so Home Assistant can discover and make use of them
+        #"--device=/dev/ttyACM0:/dev/ttyACM0"
+      ];
     };
   };
   # This value determines the NixOS release from which the default
