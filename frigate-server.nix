@@ -49,10 +49,6 @@ in
   networking.hostName = "frigate-server"; 
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
-
   # Enable networking
   networking.networkmanager.enable = true;
 
@@ -98,6 +94,8 @@ in
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     vim
+    btop
+    ncdu
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -122,11 +120,21 @@ in
   };
 
   # Open ports in the firewall.
-  networking.firewall.allowedTCPPorts = [ 80 22 8123 ];
-  networking.firewall.allowedUDPPorts = [ 5353 1900 ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
+  networking.firewall.allowedTCPPorts = [ 
+    80 #  
+    443 # https reverse proxy
+    22 # ssh
+    8080 # frigate 
+    8123 # web home assistant
+    8555 # go2rtc WebRTC
+  ];
+
+  networking.firewall.allowedUDPPorts = [ 
+    5353
+    1900
+    8555  # go2rtc WebRTC (Le flux vidéo passe principalement par UDP)
+   ];
+  
   hardware.graphics = {
     enable = true;
     extraPackages = with pkgs; [
@@ -138,6 +146,27 @@ in
 
   environment.variables = {
     LIBVA_DRIVER_NAME = "iHD"; # Force le pilote Intel Media Driver
+  };
+
+  services.mosquitto = {
+    enable = true;
+    listeners = [
+      {
+        port = 1883;
+        address = "127.0.0.1"; 
+        acl = [ "pattern readwrite #" ];
+        omitPasswordAuth = true;
+        settings.allow_anonymous = true;
+      }
+    ];
+  };
+
+# --- Reverse Proxy Caddy ---
+  services.caddy = {
+    enable = true;
+    virtualHosts."fribes.freeboxos.fr".extraConfig = ''
+      reverse_proxy 127.0.0.1:8123
+    '';
   };
 
   services.frigate = {
@@ -158,7 +187,11 @@ in
 	  labelmap_path = "${ov-model-dir}/coco_91cl_bkgr.txt";
         };
         
-      mqtt.enabled = false;
+      mqtt = {
+	enabled = true;
+        host = "127.0.0.1";
+        port = 1883;
+      };
       ffmpeg = {
         hwaccel_args = [
           "-hwaccel" "vaapi"
@@ -208,6 +241,13 @@ in
           ];
         }
 	];
+        motion = {
+          mask = [
+            "0.19,0.001,0.001,0,0.002,0.996,0.184,0.999"
+            "0.455,0.135,0.46,0.284,0.476,0.286,0.488,0.135"
+            "0.771,0.313,0.715,0.623,0.857,0.917,0.98,0.563"
+          ];
+        };
       };
       cameras."Tourette" = {
         ffmpeg.inputs = [ {
@@ -240,6 +280,13 @@ in
       };
     };
   };
+
+  # Overide nginx service packaged with frigate to free port 80 for caddy
+  services.nginx = {
+    enable = true;
+    defaultHTTPListenPort = 8080; # Nginx lâche totalement le port 80
+  };
+
   virtualisation.oci-containers = {
     backend = "podman";
     containers.homeassistant = {
