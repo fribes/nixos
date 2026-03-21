@@ -156,7 +156,7 @@ in
     meld
     minicom
     ncdu
-    neofetch
+    fastfetch
     nmap
     probe-rs-tools
     ripgrep
@@ -252,7 +252,8 @@ in
     SUBSYSTEM=="usb", ATTR{idVendor}=="1d6b", MODE="0666", GROUP="plugdev"
     SUBSYSTEM=="usb", ATTR{idVendor}=="0b05", MODE="0666", GROUP="plugdev"
     SUBSYSTEM=="usb", ATTR{idVendor}=="0bda", MODE="0666", GROUP="plugdev"
-    ATTRS{idVendor}=="0483", ATTRS{idProduct}=="3754", MODE="660", GROUP="plugdev", TAG+="uaccess"
+    SUBSYSTEM=="usb", ATTR{idVendor}=="0483", ATTR{idProduct}=="3754", MODE="0660", GROUP="plugdev", TAG+="uaccess"
+    SUBSYSTEM=="usb", ATTR{idVendor}=="0483", ATTR{idProduct}=="374e", MODE="0660", GROUP="plugdev", TAG+="uaccess"
     '';
 
   systemd.services.nix-daemon.serviceConfig.Environment = [
