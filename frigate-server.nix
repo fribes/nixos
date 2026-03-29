@@ -6,27 +6,32 @@
 
 let
   ov-xml = pkgs.fetchurl {
-    url = "https://huggingface.co/katuni4ka/ssdlite_mobilenet_v2_fp16/resolve/main/ssdlite_mobilenet_v2_fp16.xml";
-    hash = "sha256-fj4qmst8eAx1lD2pgnQMNyo3RZ15DScKmGNfOnZjFHo=";
+    url = "https://huggingface.co/mgumowsk/YOLO11/resolve/main/YOLO-11-S.xml";
+    hash = "sha256-VBVFYITuPQlkbbiPECpH+qE3+aVRth0XwK2kJdvGTEU=";
   };
 
   ov-bin = pkgs.fetchurl {
-    url = "https://huggingface.co/katuni4ka/ssdlite_mobilenet_v2_fp16/resolve/main/ssdlite_mobilenet_v2_fp16.bin";
-    hash = "sha256-6a5hSZtAEUT2+jvAh4XVW9+7ircGtYyHB1WDDMBGY9M=";
+    url = "https://huggingface.co/mgumowsk/YOLO11/resolve/main/YOLO-11-S.bin";
+    hash = "sha256-OarAsb9lpUD9+WFSPL7M5oUxGFs0RFnkXMST5j3v4bU=";
   };
 
   ov-labels = pkgs.fetchurl {
-    url = "https://github.com/openvinotoolkit/open_model_zoo/raw/master/data/dataset_classes/coco_91cl_bkgr.txt";
-    hash = "sha256-5Cj2vEiWR8Z9d2xBmVoLZuNRv4UOuxHSGZQWTJorXUQ=";
+    url = "https://raw.githubusercontent.com/pjreddie/darknet/master/data/coco.names";
+    hash = "sha256-Y0oRMusz+AkdYPLDRqur6LkFrgg4cDeu2IOVO3Mpr4Q="; 
   };
 
-  ov-model-dir = pkgs.runCommand "frigate-openvino-model" {} ''
+  ov-model-dir = pkgs.runCommand "frigate-yolo11s-model" {} ''
     mkdir -p $out
-    cp ${ov-xml} $out/ssdlite_mobilenet_v2.xml
-    cp ${ov-bin} $out/ssdlite_mobilenet_v2.bin
-    cp ${ov-labels} $out/coco_91cl_bkgr.txt
-    sed -i 's/truck/car/g' $out/coco_91cl_bkgr.txt
+    
+    # Copie des fichiers avec les nouveaux noms
+    cp ${ov-xml} $out/yolo11s.xml
+    cp ${ov-bin} $out/yolo11s.bin
+    cp ${ov-labels} $out/coco_80cl.txt
+    
+    # Conservation de votre règle de regroupement (camions -> voitures)
+    sed -i 's/truck/car/g' $out/coco_80cl.txt
   '';
+
   rtsp_creds = lib.trim (builtins.readFile /home/fribes/rtsp_creds);
 in
 {
@@ -96,6 +101,7 @@ in
     vim
     btop
     ncdu
+    intel-gpu-tools
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -177,16 +183,17 @@ in
           type = "openvino";
           device = "GPU";
         };
-        
-        model = {
-          path = "${ov-model-dir}/ssdlite_mobilenet_v2.xml";
-          width = 300;
-          height = 300;
-          input_tensor = "nhwc";
-          input_pixel_format = "bgr";
-	  labelmap_path = "${ov-model-dir}/coco_91cl_bkgr.txt";
-        };
-        
+    
+     model = {
+       path = "${ov-model-dir}/yolo11s.xml";
+       width = 640; 
+       height = 640;
+       model_type = "yolo-generic"; # also for other Yolo models (v10, v11)
+       input_tensor = "nhwc"; 
+       input_pixel_format = "rgb"; 
+       labelmap_path = "${ov-model-dir}/coco_80cl.txt";
+     };
+    
       mqtt = {
 	enabled = true;
         host = "127.0.0.1";
