@@ -5,33 +5,65 @@
 { config, pkgs, lib,... }:
 
 let
-  ov-xml = pkgs.fetchurl {
-    url = "https://huggingface.co/mgumowsk/YOLO11/resolve/main/YOLO-11-S.xml";
-    hash = "sha256-VBVFYITuPQlkbbiPECpH+qE3+aVRth0XwK2kJdvGTEU=";
+  # PyTorch original input
+  yolo-pt = pkgs.fetchurl {
+    url = "https://github.com/ultralytics/assets/releases/download/v8.3.0/yolo11n.pt";
+    hash = "sha256-DrvIDUp2gNFJh6V3zSE0K2Xs/ZRjK9mo2mOuZBdkTuE=";
   };
 
-  ov-bin = pkgs.fetchurl {
-    url = "https://huggingface.co/mgumowsk/YOLO11/resolve/main/YOLO-11-S.bin";
-    hash = "sha256-OarAsb9lpUD9+WFSPL7M5oUxGFs0RFnkXMST5j3v4bU=";
-  };
-
+  # COCO labels
   ov-labels = pkgs.fetchurl {
     url = "https://raw.githubusercontent.com/pjreddie/darknet/master/data/coco.names";
-    hash = "sha256-Y0oRMusz+AkdYPLDRqur6LkFrgg4cDeu2IOVO3Mpr4Q="; 
+    hash = "sha256-Y0oRMusz+AkdYPLDRqur6LkFrgg4cDeu2IOVO3Mpr4Q=";
   };
 
-  ov-model-dir = pkgs.runCommand "frigate-yolo11s-model" {} ''
+  # ephemeral Python env with required tools
+  yolo-env = pkgs.python3.withPackages (ps: with ps; [
+    ultralytics
+    openvino
+  ]);
+
+  # derivation to set up conversion
+  ov-model-dir = pkgs.runCommand "frigate-yolo11n-fp16-model" {
+    buildInputs = [ yolo-env ];
+  } ''
     mkdir -p $out
     
-    # Copie des fichiers avec les nouveaux noms
-    cp ${ov-xml} $out/yolo11s.xml
-    cp ${ov-bin} $out/yolo11s.bin
-    cp ${ov-labels} $out/coco_80cl.txt
+    cp ${yolo-pt} ./yolo11n.pt
     
-    # Conservation de votre règle de regroupement (camions -> voitures)
+    # FP16 iexport from local file
+    yolo export model=./yolo11n.pt format=openvino half=true
+   
+cat << 'EOF' > fix_u8.py
+import openvino as ov
+from openvino.preprocess import PrePostProcessor
+
+core = ov.Core()
+model = core.read_model("yolo11n_openvino_model/yolo11n.xml")
+ppp = PrePostProcessor(model)
+
+inp = ppp.input()
+# 1. Frigate send u8 data with NHWC format
+inp.tensor().set_element_type(ov.Type.u8).set_layout(ov.Layout("NHWC"))
+
+# 2. convert to f16 and normalize 
+inp.preprocess().convert_element_type(ov.Type.f16).scale([255.0, 255.0, 255.0])
+
+# 3. YOLO model expect NCHW format
+inp.model().set_layout(ov.Layout("NCHW"))
+
+model = ppp.build()
+ov.save_model(model, "yolo11n_openvino_model/yolo11n_u8.xml")
+EOF
+ 
+    python3 fix_u8.py
+    
+    cp ./yolo11n_openvino_model/yolo11n_u8.xml $out/yolo11n.xml
+    cp ./yolo11n_openvino_model/yolo11n_u8.bin $out/yolo11n.bin
+    
+    cp ${ov-labels} $out/coco_80cl.txt
     sed -i 's/truck/car/g' $out/coco_80cl.txt
   '';
-
   rtsp_creds = lib.trim (builtins.readFile /home/fribes/rtsp_creds);
 in
 {
@@ -185,7 +217,7 @@ in
         };
     
      model = {
-       path = "${ov-model-dir}/yolo11s.xml";
+       path = "${ov-model-dir}/yolo11n.xml";
        width = 640; 
        height = 640;
        model_type = "yolo-generic"; # also for other Yolo models (v10, v11)
@@ -218,6 +250,16 @@ in
         enabled = true;
         width = 1280;
         height = 720;
+      };
+
+      objects = {
+        track = [ "person" ]; # Les objets que vous voulez suivre
+        filters = {
+          person = {
+            min_score = 0.4;  # Frigate commence à suivre dès 40% de certitude
+            threshold = 0.5;  # Frigate valide l'événement à 50% au lieu de 70%
+          };
+        };
       };
 
       cameras."Boulette" = {
