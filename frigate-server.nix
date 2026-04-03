@@ -347,7 +347,7 @@ in
       volumes = [ "home-assistant:/config" ];
       environment.TZ = "Europe/Paris";
       # Note: The image will not be updated on rebuilds, unless the version label changes
-      image = "ghcr.io/home-assistant/home-assistant:stable";
+      image = "ghcr.io/home-assistant/home-assistant:2026.4.0";
       devices = [
         "/dev/serial/by-id/usb-Itead_Sonoff_Zigbee_3.0_USB_Dongle_Plus_V2_f4641a58a678f01190cbfaeba7772636-if00-port0:/dev/ttyUSB0"
       ];
