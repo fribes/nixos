@@ -164,11 +164,17 @@ in
     slack
     starship
     stow
-    sublime4
     terminator
     usbutils
     vlc
     vim-full                   # full for clipboard support
+    (vscode-with-extensions.override {
+      vscode = vscode;
+      vscodeExtensions = with vscode-extensions; [
+        ms-vscode.cpptools
+        rust-lang.rust-analyzer
+      ];
+    })
     wget
     wireshark
     yazi
@@ -201,10 +207,6 @@ in
            pkgs.nerd-fonts._0xproto
            pkgs.nerd-fonts.droid-sans-mono
          ];
-
-  nixpkgs.config.permittedInsecurePackages = [
-    "openssl-1.1.1w"           # required by sublime text
-  ];
 
   programs.bash = {
     completion.enable = true;
