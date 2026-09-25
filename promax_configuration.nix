@@ -78,12 +78,11 @@ in
   # Enable CUPS to print documents.
   services.printing = {
     enable = true;
+    cups-pdf.enable = true;
     drivers = [
       pkgs.brlaser  # Driver générique excellent pour beaucoup de Brother Laser
     ];
   };
-
-
 
   # Enable sound with pipewire.
   services.pulseaudio.enable = false;
