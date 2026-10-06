@@ -256,8 +256,8 @@ in
         track = [ "person" ]; # Les objets que vous voulez suivre
         filters = {
           person = {
-            min_score = 0.4;  # Frigate commence à suivre dès 40% de certitude
-            threshold = 0.5;  # Frigate valide l'événement à 50% au lieu de 70%
+            min_score = 0.5;  # Frigate commence à suivre dès 40% de certitude
+            threshold = 0.7;  # Frigate valide l'événement à 50% au lieu de 70%
           };
         };
       };
@@ -347,7 +347,7 @@ in
       volumes = [ "home-assistant:/config" ];
       environment.TZ = "Europe/Paris";
       # Note: The image will not be updated on rebuilds, unless the version label changes
-      image = "ghcr.io/home-assistant/home-assistant:2026.4.0";
+      image = "ghcr.io/home-assistant/home-assistant:2026.9.4";
       devices = [
         "/dev/serial/by-id/usb-Itead_Sonoff_Zigbee_3.0_USB_Dongle_Plus_V2_f4641a58a678f01190cbfaeba7772636-if00-port0:/dev/ttyUSB0"
       ];
