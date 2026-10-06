@@ -18,6 +18,20 @@ in
   boot.loader.efi.canTouchEfiVariables = true;
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.kernelParams = [ "split_lock_detect=warn" ];
+
+  zramSwap = {
+    enable = true;
+    memoryPercent = 15; # 15% of 32GB = 4.8GB => 32-5 + 3*5 GB compressed => 42GB
+  };
+
+  systemd.oomd.enable = false; # earlyoom instead
+  services.earlyoom = {
+    enable = true;
+    freeMemThreshold = 5; # Trigger when 5% free memory left
+    freeSwapThreshold = 5;  # Trigger when 5% swap (zram) left
+    enableNotifications = true;
+  };
 
   networking.hostName = "promax"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -170,6 +184,7 @@ in
     (vscode-with-extensions.override {
       vscode = vscode;
       vscodeExtensions = with vscode-extensions; [
+        jnoortheen.nix-ide
         ms-vscode.cpptools
         rust-lang.rust-analyzer
       ];
