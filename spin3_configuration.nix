@@ -120,6 +120,7 @@
   environment.systemPackages = with pkgs; [
     bat
     btop
+    chirp
     curl
     dconf-editor
     diff-so-fancy
@@ -137,7 +138,7 @@
     meld
     minicom
     ncdu
-    neofetch
+    fastfetch
     ripgrep
     starship
     stow
@@ -147,6 +148,7 @@
     vim-full                   # full for clipboard support
     wget
     wine
+    wireguard-tools
     wsjtx
     yazi
     zathura
@@ -162,7 +164,6 @@
     gedit # text editor
     gnome-characters
     gnome-music
-    gnome-photos
     gnome-terminal
     gnome-tour
     hitori # sudoku game
